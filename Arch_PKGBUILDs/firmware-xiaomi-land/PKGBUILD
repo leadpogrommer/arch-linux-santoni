@@ -1,0 +1,37 @@
+# Maintainer: Danct12 <dancthuynh255@gmail.com>
+pkgname=firmware-xiaomi-land
+pkgver=0.1
+pkgrel=0
+pkgdesc="Firmware files for postmarketOS from xiaomi-land"
+arch=('aarch64')
+url="https://github.com/leadpogrommer/vendor_xiaomi_land"
+license=('proprietary')
+options=(!strip)
+
+# Source
+_files="wcnss.b00 wcnss.b01 wcnss.b02 wcnss.b04 wcnss.b06 wcnss.b09 wcnss.b10 wcnss.b11 wcnss.b12 wcnss.mdt adsp.b00 adsp.b01 adsp.b02 adsp.b03 adsp.b04 adsp.b05 adsp.b06 adsp.b07 adsp.b08 adsp.b09 adsp.b10 adsp.b11 adsp.b12 adsp.b13 adsp.mdt"
+_files_prima="WCNSS_wlan_dictionary.dat WCNSS_qcom_cfg.ini WCNSS_qcom_wlan_nv.bin"
+_commit="178067f9b004a8163837721ca4f72cc5948a1350"
+
+source=("${pkgname}-${_commit}.tar.gz::https://github.com/leadpogrommer/vendor_xiaomi_land/archive/${_commit}.tar.gz")
+
+package() {
+	cd "$srcdir"/vendor_xiaomi_land-${_commit}
+
+	mkdir -p "$pkgdir"/usr/lib/firmware/postmarketos
+
+	# /lib/firmware/postmarketos
+	for _i in $_files; do
+		install -D -m644 "$_i" \
+			"$pkgdir"/usr/lib/firmware/postmarketos/$_i
+	done
+
+	# /lib/firmware/postmarketos/wlan/prima
+	for _i in $_files_prima; do
+		install -D -m644 "wlan/prima/$_i" \
+			"$pkgdir"/usr/lib/firmware/postmarketos/wlan/prima/$_i
+	done
+
+
+}
+md5sums=('SKIP')
